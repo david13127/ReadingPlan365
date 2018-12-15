@@ -5,15 +5,15 @@ import com.thirdleave.readingplan.service.po.UserPO;
 
 public interface IUserBizService {
 
-	ResultPO userRegister(UserPO user);
+    ResultPO userRegister(UserPO user);
 
-	ResultPO userLogin(UserPO user);
+    ResultPO userLogin(UserPO user);
 
-	ResultPO changePassword(String newPassword, String oldPassword);
+    ResultPO changePassword(String newPassword, String oldPassword);
 
-	ResultPO userDelete(String userID);
+    ResultPO userDelete(String userID);
 
-	ResultPO userModify(UserPO user);
+    ResultPO userModify(UserPO user);
 
-	ResultPO userAuthorityModify(UserPO user);
+    ResultPO userAuthorityModify(UserPO user);
 }

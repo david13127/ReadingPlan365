@@ -1,38 +1,60 @@
 package com.thirdleave.readingplan.config;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.net.URL;
+import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
+import org.springframework.beans.BeansException;
+import org.springframework.core.io.support.PropertiesLoaderUtils;
+
+/**
+ * @配置
+ * @author david
+ * @date 2018年12月15日 下午6:58:18
+ */
 public class PropertiesConfig {
 
-	private static URL CONFIG_URL = PropertiesConfig.class.getClassLoader().getResource("application.properties");
+    public static Map<String, String> propertiesMap = new HashMap<>();
 
-	public static String getProperties(String key) {
-		Properties properties = new Properties();
-		try {
-			properties.load(new FileReader(CONFIG_URL.getPath()));
-			return properties.getProperty(key);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
+    private static void processProperties(Properties props)
+        throws BeansException {
+        propertiesMap = new HashMap<String, String>();
+        for (Object key : props.keySet()) {
+            String keyStr = key.toString();
+            try {
+                // PropertiesLoaderUtils的默认编码是ISO-8859-1,在这里转码一下
+                propertiesMap.put(keyStr, new String(props.getProperty(keyStr).getBytes("ISO-8859-1"), "utf-8"));
+            }
+            catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            catch (java.lang.Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
-	public static Integer getIntProperties(String key) {
-		Properties properties = new Properties();
-		try {
-			properties.load(new FileReader(CONFIG_URL.getPath()));
-			return Integer.valueOf(properties.getProperty(key));
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
+    public static void loadAllProperties(String propertyFileName) {
+        try {
+            Properties properties = PropertiesLoaderUtils.loadAllProperties(propertyFileName);
+            processProperties(properties);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static String getProperties(String name) {
+        return propertiesMap.get(name).toString();
+    }
+
+    public static Integer getIntProperties(String name) {
+        return Integer.valueOf(propertiesMap.get(name).toString());
+    }
+
+    public static Map<String, String> getAllProperty() {
+        return propertiesMap;
+    }
 }

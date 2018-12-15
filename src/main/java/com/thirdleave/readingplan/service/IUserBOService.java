@@ -6,17 +6,17 @@ import com.thirdleave.readingplan.service.po.ResultPO;
 
 public interface IUserBOService {
 
-	ResultPO setUserID(String userID);
+    ResultPO setUserID(String userID);
 
-	ResultPO setUserName(String name);
+    ResultPO setUserName(String name);
 
-	ResultPO setUserPassword(String password);
+    ResultPO setUserPassword(String password);
 
-	ResultPO setUserSex(String sex);
+    ResultPO setUserSex(String sex);
 
-	ResultPO setUserBirthday(Date birthday);
+    ResultPO setUserBirthday(Date birthday);
 
-	ResultPO setUserRemark(String remark);
+    ResultPO setUserRemark(String remark);
 
-	ResultPO setUserEmailAddress(String emailAddress);
+    ResultPO setUserEmailAddress(String emailAddress);
 }

@@ -1,68 +1,75 @@
 package com.thirdleave.readingplan.service.po;
 
 public class UserPO {
-	private String userID;
-	private String password;
-	private String name;
-	private String sex;
-	private String birthDate;
-	private String remark;
-	private String emailAddress;
 
-	public String getUserID() {
-		return userID;
-	}
+    private String userID;
 
-	public void setUserID(String userID) {
-		this.userID = userID;
-	}
+    private String password;
 
-	public String getName() {
-		return name;
-	}
+    private String name;
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    private String sex;
 
-	public String getSex() {
-		return sex;
-	}
+    private String birthDate;
 
-	public void setSex(String sex) {
-		this.sex = sex;
-	}
+    private String remark;
 
-	public String getBirthDate() {
-		return birthDate;
-	}
+    private String emailAddress;
 
-	public void setBirthDate(String birthDate) {
-		this.birthDate = birthDate;
-	}
+    public String getUserID() {
+        return userID;
+    }
 
-	public String getRemark() {
-		return remark;
-	}
+    public void setUserID(String userID) {
+        this.userID = userID;
+    }
 
-	public void setRemark(String remark) {
-		this.remark = remark;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public String getEmailAddress() {
-		return emailAddress;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setEmailAddress(String emailAddress) {
-		this.emailAddress = emailAddress;
-	}
+    public String getSex() {
+        return sex;
+    }
 
-	public String getPassword() {
-		return password;
-	}
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    public String getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(String birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public String getEmailAddress() {
+        return emailAddress;
+    }
+
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
 }

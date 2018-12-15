@@ -14,22 +14,22 @@ import com.thirdleave.readingplan.service.po.UserPO;
 
 @RestController
 public class RestTest {
-	@Autowired
-	private UserControl userControl;
 
-	@RequestMapping(value = "/login", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody
-	public String userLogin(@RequestParam(value = "userID") String userID,
-			@RequestParam(value = "password") String password) {
-		UserPO user = new UserPO();
-		user.setUserID(userID);
-		user.setPassword(password);
-		return userControl.userLogin(user);
-	}
+    @Autowired
+    private UserControl userControl;
 
-	@RequestMapping(value = "/signup", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody
-	public String userRegister(@RequestBody UserPO user) {
-		return userControl.userRegister(user);
-	}
+    @RequestMapping(value = "/login", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String userLogin(@RequestParam(value = "userID") String userID, @RequestParam(value = "password") String password) {
+        UserPO user = new UserPO();
+        user.setUserID(userID);
+        user.setPassword(password);
+        return userControl.userLogin(user);
+    }
+
+    @RequestMapping(value = "/signup", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String userRegister(@RequestBody UserPO user) {
+        return userControl.userRegister(user);
+    }
 }
