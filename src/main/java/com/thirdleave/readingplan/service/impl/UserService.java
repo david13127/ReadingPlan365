@@ -12,8 +12,8 @@ import com.thirdleave.readingplan.service.IUserService;
 import com.thirdleave.readingplan.service.po.ResultPO;
 import com.thirdleave.readingplan.service.po.UserAuthorityPO;
 import com.thirdleave.readingplan.service.po.UserPO;
-import com.thirdleave.readingplan.utils.JedisUtils;
 import com.thirdleave.readingplan.utils.ReflectUtils;
+import com.thirdleave.readingplan.utils.redis.JedisUtils;
 import com.thirdleave.readingplan.utils.redis.RedisKeyUtil;
 
 @Service

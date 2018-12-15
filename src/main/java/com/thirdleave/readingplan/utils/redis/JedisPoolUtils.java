@@ -1,4 +1,4 @@
-package com.thirdleave.readingplan.utils;
+package com.thirdleave.readingplan.utils.redis;
 
 import javax.annotation.PostConstruct;
 
