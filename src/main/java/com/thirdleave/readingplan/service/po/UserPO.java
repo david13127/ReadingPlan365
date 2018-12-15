@@ -1,15 +1,6 @@
 package com.thirdleave.readingplan.service.po;
 
-import java.io.Serializable;
-
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-
-@JsonDeserialize(as = UserPO.class)
-public class UserPO implements Serializable {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public class UserPO {
 	private String userID;
 	private String password;
 	private String name;

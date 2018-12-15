@@ -6,6 +6,8 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.thirdleave.readingplan.constant.IRedisTableKey;
+import com.thirdleave.readingplan.constant.IResultConstant;
 import com.thirdleave.readingplan.service.IUserService;
 import com.thirdleave.readingplan.service.po.ResultPO;
 import com.thirdleave.readingplan.service.po.UserAuthorityPO;
@@ -20,7 +22,7 @@ public class UserService implements IUserService {
 
 	@Override
 	public UserPO findUserByID(String userID) {
-		String key = RedisKeyUtil.getKey("user", "userID", userID);
+		String key = RedisKeyUtil.getKey(IRedisTableKey.TBL_USER, IRedisTableKey.TBL_USER_USERID, userID);
 		Map<String, String> userInfo = JedisUtils.hgetAll(key);
 		UserPO userDB = null;
 		try {
@@ -77,10 +79,10 @@ public class UserService implements IUserService {
 	public ResultPO userRegister(UserPO user) {
 		ResultPO registerResult = new ResultPO();
 		String userID = user.getUserID();
-		String userTablekey = RedisKeyUtil.getKey("user", "userID", userID);
+		String userTablekey = RedisKeyUtil.getKey(IRedisTableKey.TBL_USER, IRedisTableKey.TBL_USER_USERID, userID);
 		boolean hasKey = JedisUtils.exists(userTablekey);
 		if (hasKey) {
-			registerResult.setStatus("error");
+			registerResult.setStatus(IResultConstant.STATUS_ERROR);
 			registerResult.setMessage("UserID/Name already exists");
 		} else {
 			Map<String, String> userInfo = null;
@@ -90,14 +92,13 @@ public class UserService implements IUserService {
 				e.printStackTrace();
 			}
 			String status = JedisUtils.hmset(userTablekey, userInfo);
-			if ("OK".equals(status)) {
+			if (IResultConstant.STATUS_OK.equals(status)) {
 				UserPO userDB = findUserByID(user.getUserID());
 				if (userDB != null) {
 					registerResult.setStatus(status);
 					registerResult.setResults(userDB);
-				}
-				else {
-					registerResult.setStatus("error");
+				} else {
+					registerResult.setStatus(IResultConstant.STATUS_ERROR);
 					registerResult.setMessage(status);
 				}
 			}
@@ -110,7 +111,7 @@ public class UserService implements IUserService {
 		ResultPO loginResult = new ResultPO();
 		String userID = user.getUserID();
 		String password = user.getPassword();
-		String userTablekey = RedisKeyUtil.getKey("user", "userID", userID);
+		String userTablekey = RedisKeyUtil.getKey(IRedisTableKey.TBL_USER, IRedisTableKey.TBL_USER_USERID, userID);
 		boolean hasKey = JedisUtils.exists(userTablekey);
 		if (hasKey) {
 			Map<String, String> userInfo = JedisUtils.hgetAll(userTablekey);
@@ -121,7 +122,8 @@ public class UserService implements IUserService {
 				e.printStackTrace();
 			}
 			if (password.equals(userResult.getPassword())) {
-				String authTableKey = RedisKeyUtil.getKey("userAuth", "userID", userID);
+				String authTableKey = RedisKeyUtil.getKey(IRedisTableKey.TBL_USERAUTH, IRedisTableKey.TBL_USER_USERID,
+						userID);
 				Map<String, String> authInfo = JedisUtils.hgetAll(authTableKey);
 				UserAuthorityPO authority = null;
 				try {
@@ -131,19 +133,19 @@ public class UserService implements IUserService {
 				}
 				int loginLimitHours = Integer.valueOf(authority.getLoginLimitHours());
 				if (loginLimitHours <= 0) {
-					loginResult.setStatus("OK");
+					loginResult.setStatus(IResultConstant.STATUS_OK);
 					loginResult.setResults(userResult);
 				} else {
-					loginResult.setStatus("Limit");
+					loginResult.setStatus(IResultConstant.STATUS_LIMIT);
 					loginResult.setMessage("Login limited in " + loginLimitHours + " hours");
 				}
 			} else {
-				loginResult.setStatus("error");
+				loginResult.setStatus(IResultConstant.STATUS_ERROR);
 				loginResult.setMessage("Password error");
 			}
 
 		} else {
-			loginResult.setStatus("error");
+			loginResult.setStatus(IResultConstant.STATUS_ERROR);
 			loginResult.setMessage("UserID/Name error");
 		}
 		return loginResult;

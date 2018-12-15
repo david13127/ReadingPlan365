@@ -2,7 +2,7 @@ package com.thirdleave.readingplan.controller.po;
 
 import java.util.List;
 
-public class ResponseJson {
+public class Response {
 	private String status;
 	private String message;
 	private List<? extends Object> results;
