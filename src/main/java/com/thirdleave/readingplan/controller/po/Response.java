@@ -3,36 +3,39 @@ package com.thirdleave.readingplan.controller.po;
 import java.util.List;
 
 public class Response {
-	private String status;
-	private String message;
-	private List<? extends Object> results;
 
-	public String getStatus() {
-		return status;
-	}
+    private String status;
 
-	public void setStatus(String status) {
-		this.status = status;
-	}
+    private String message;
 
-	public String getMessage() {
-		return message;
-	}
+    private List<? extends Object> results;
 
-	public void setMessage(String message) {
-		this.message = message;
-	}
+    public String getStatus() {
+        return status;
+    }
 
-	public List<? extends Object> getResults() {
-		return results;
-	}
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
-	public void setResults(List<? extends Object> results) {
-		this.results = results;
-	}
+    public String getMessage() {
+        return message;
+    }
 
-	@Override
-	public String toString() {
-		return "{" + "status:" + status + ", message:" + message + "}";
-	}
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public List<? extends Object> getResults() {
+        return results;
+    }
+
+    public void setResults(List<? extends Object> results) {
+        this.results = results;
+    }
+
+    @Override
+    public String toString() {
+        return "{" + "status:" + status + ", message:" + message + "}";
+    }
 }

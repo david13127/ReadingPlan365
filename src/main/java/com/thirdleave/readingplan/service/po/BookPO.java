@@ -1,59 +1,65 @@
 package com.thirdleave.readingplan.service.po;
 
 public class BookPO {
-	private String bookID;
-	private String bookName;
-	private String kind;
-	private String author;
-	private String price;
-	private String publish;
 
-	public String getBookID() {
-		return bookID;
-	}
+    private String bookID;
 
-	public void setBookID(String bookID) {
-		this.bookID = bookID;
-	}
+    private String bookName;
 
-	public String getBookName() {
-		return bookName;
-	}
+    private String kind;
 
-	public void setBookName(String bookName) {
-		this.bookName = bookName;
-	}
+    private String author;
 
-	public String getKind() {
-		return kind;
-	}
+    private String price;
 
-	public void setKind(String kind) {
-		this.kind = kind;
-	}
+    private String publish;
 
-	public String getAuthor() {
-		return author;
-	}
+    public String getBookID() {
+        return bookID;
+    }
 
-	public void setAuthor(String author) {
-		this.author = author;
-	}
+    public void setBookID(String bookID) {
+        this.bookID = bookID;
+    }
 
-	public String getPrice() {
-		return price;
-	}
+    public String getBookName() {
+        return bookName;
+    }
 
-	public void setPrice(String price) {
-		this.price = price;
-	}
+    public void setBookName(String bookName) {
+        this.bookName = bookName;
+    }
 
-	public String getPublish() {
-		return publish;
-	}
+    public String getKind() {
+        return kind;
+    }
 
-	public void setPublish(String publish) {
-		this.publish = publish;
-	}
+    public void setKind(String kind) {
+        this.kind = kind;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
+    public String getPublish() {
+        return publish;
+    }
+
+    public void setPublish(String publish) {
+        this.publish = publish;
+    }
 
 }
