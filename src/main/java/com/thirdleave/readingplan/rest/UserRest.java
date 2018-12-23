@@ -13,7 +13,8 @@ import com.thirdleave.readingplan.controller.UserControl;
 import com.thirdleave.readingplan.service.po.UserPO;
 
 @RestController
-public class RestTest {
+@RequestMapping(value = "/user")
+public class UserRest {
 
     @Autowired
     private UserControl userControl;
@@ -32,4 +33,5 @@ public class RestTest {
     public String userRegister(@RequestBody UserPO user) {
         return userControl.userRegister(user);
     }
+    
 }

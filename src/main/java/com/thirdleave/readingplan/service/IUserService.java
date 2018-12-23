@@ -4,5 +4,5 @@ import com.thirdleave.readingplan.service.po.UserPO;
 
 public interface IUserService extends IUserBOService, IUserBizService {
 
-    UserPO findUserByID(String userID);
+    UserPO queryUserByID(String userID);
 }

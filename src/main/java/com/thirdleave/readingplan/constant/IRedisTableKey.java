@@ -4,7 +4,7 @@ public interface IRedisTableKey {
 
     public final static String TBL_USER = "user";
 
-    public final static String TBL_USER_USERID = "userID";
+    public final static String TBL_USER_ID = "userID";
 
     public final static String TBL_USER_PASSWORD = "password";
 
@@ -34,21 +34,27 @@ public interface IRedisTableKey {
 
     public final static String TBL_BOOK_NAME = "bookName";
 
+    public final static String TBL_BOOK_KIND = "kind";
+    
     public final static String TBL_BOOK_AUTHOR = "author";
 
     public final static String TBL_BOOK_PRICE = "price";
 
     public final static String TBL_BOOK_PUBLISH = "publish";
+    
+    public final static String TBL_BOOK_DESC = "description";
+    
+    public final static String TBL_BOOK_REMARK = "remark";
 
     public final static String TBL_USER_BOOK_AUTH = "userBookAuth";
 
-    public final static String TBL_USER_BOOK_AUTH_MAJOR_KEY = TBL_USER_USERID + ":" + TBL_BOOK_ID;
+    public final static String TBL_USER_BOOK_AUTH_MAJOR_KEY = TBL_USER_ID + ":" + TBL_BOOK_ID;
 
     public final static String TBL_USER_BOOK_AUTH_DOWNLOADLIMIT = "downLoadLimit";
 
-    public final static String TBL_USER_BOOK_AUTH_ODIFYLIMIT = "odifyLimit";
+    public final static String TBL_USER_BOOK_AUTH_MODIFYLIMIT = "modifyLimit";
 
     public final static String TBL_USER_BOOK_AUTH_SHARELIMIT = "shareLimit";
 
-    public final static String TBL_USER_BOOK_AUTH_DELETELIMIT = "downLoadLimit";
+    public final static String TBL_USER_BOOK_AUTH_DELETELIMIT = "deleteLimit";
 }

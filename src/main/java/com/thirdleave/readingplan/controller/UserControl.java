@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import com.thirdleave.readingplan.constant.IResultConstant;
-import com.thirdleave.readingplan.controller.po.Response;
 import com.thirdleave.readingplan.service.IUserService;
 import com.thirdleave.readingplan.service.po.ResultPO;
 import com.thirdleave.readingplan.service.po.UserPO;
@@ -21,13 +20,13 @@ public class UserControl {
     private IUserService userService;
 
     public String getUserName(UserPO user) {
-        Response resp = new Response();
-        UserPO userDB = userService.findUserByID(user.getUserID());
+        ResultPO resp = new ResultPO();
+        UserPO userDB = userService.queryUserByID(user.getUserID());
         if (userDB != null) {
             resp.setStatus(IResultConstant.STATUS_OK);
             List<UserPO> users = new ArrayList<UserPO>();
             users.add(userDB);
-            resp.setResults(users);
+            resp.setResult(users);
         }
         else {
             resp.setStatus(IResultConstant.STATUS_ERROR);
@@ -36,14 +35,12 @@ public class UserControl {
     }
 
     public String userLogin(UserPO user) {
-        Response resp = new Response();
+    	ResultPO resp = new ResultPO();
         ResultPO result = userService.userLogin(user);
         if ("OK".equals(result.getStatus())) {
-            UserPO userFind = (UserPO)result.getResults();
+            UserPO userFind = (UserPO)result.getResult();
             resp.setStatus(result.getStatus());
-            List<UserPO> users = new ArrayList<UserPO>();
-            users.add(userFind);
-            resp.setResults(users);
+            resp.setResult(userFind);
         }
         else {
             resp.setStatus(result.getStatus());
@@ -53,14 +50,12 @@ public class UserControl {
     }
 
     public String userRegister(UserPO user) {
-        Response resp = new Response();
+    	ResultPO resp = new ResultPO();
         ResultPO result = userService.userRegister(user);
         if (IResultConstant.STATUS_OK.equals(result.getStatus())) {
-            UserPO userFind = (UserPO)result.getResults();
+            UserPO userFind = (UserPO)result.getResult();
             resp.setStatus(result.getStatus());
-            List<UserPO> users = new ArrayList<UserPO>();
-            users.add(userFind);
-            resp.setResults(users);
+            resp.setResult(userFind);
         }
         else {
             resp.setStatus(result.getStatus());

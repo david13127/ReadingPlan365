@@ -9,7 +9,7 @@ public class ReflectUtils {
 
     public static Object mapToObject(Map<String, ? extends Object> map, Class<?> beanClass)
         throws Exception {
-        if (map == null) {
+        if (map == null || map.isEmpty()) {
             return null;
         }
 

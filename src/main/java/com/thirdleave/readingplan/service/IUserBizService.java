@@ -14,6 +14,4 @@ public interface IUserBizService {
     ResultPO userDelete(String userID);
 
     ResultPO userModify(UserPO user);
-
-    ResultPO userAuthorityModify(UserPO user);
 }

@@ -3,11 +3,13 @@ package com.thirdleave.readingplan.service.impl;
 import java.util.Date;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.thirdleave.readingplan.constant.IRedisTableKey;
 import com.thirdleave.readingplan.constant.IResultConstant;
+import com.thirdleave.readingplan.service.IUserAuthorityService;
 import com.thirdleave.readingplan.service.IUserService;
 import com.thirdleave.readingplan.service.po.ResultPO;
 import com.thirdleave.readingplan.service.po.UserAuthorityPO;
@@ -19,10 +21,13 @@ import com.thirdleave.readingplan.utils.redis.RedisKeyUtil;
 @Service
 @Transactional
 public class UserService implements IUserService {
-
+	
+	@Autowired
+	private IUserAuthorityService userAuthorityService;
+	
     @Override
-    public UserPO findUserByID(String userID) {
-        String key = RedisKeyUtil.getKey(IRedisTableKey.TBL_USER, IRedisTableKey.TBL_USER_USERID, userID);
+    public UserPO queryUserByID(String userID) {
+        String key = RedisKeyUtil.getKey(IRedisTableKey.TBL_USER, IRedisTableKey.TBL_USER_ID, userID);
         Map<String, String> userInfo = JedisUtils.hgetAll(key);
         UserPO userDB = null;
         try {
@@ -80,7 +85,7 @@ public class UserService implements IUserService {
     public ResultPO userRegister(UserPO user) {
         ResultPO registerResult = new ResultPO();
         String userID = user.getUserID();
-        String userTablekey = RedisKeyUtil.getKey(IRedisTableKey.TBL_USER, IRedisTableKey.TBL_USER_USERID, userID);
+        String userTablekey = RedisKeyUtil.getKey(IRedisTableKey.TBL_USER, IRedisTableKey.TBL_USER_ID, userID);
         boolean hasKey = JedisUtils.exists(userTablekey);
         if (hasKey) {
             registerResult.setStatus(IResultConstant.STATUS_ERROR);
@@ -94,16 +99,25 @@ public class UserService implements IUserService {
             catch (Exception e) {
                 e.printStackTrace();
             }
-            String status = JedisUtils.hmset(userTablekey, userInfo);
-            if (IResultConstant.STATUS_OK.equals(status)) {
-                UserPO userDB = findUserByID(user.getUserID());
+            String status1 = JedisUtils.hmset(userTablekey, userInfo);
+            if (IResultConstant.STATUS_OK.equals(status1)) {
+                UserPO userDB = queryUserByID(user.getUserID());
                 if (userDB != null) {
-                    registerResult.setStatus(status);
-                    registerResult.setResults(userDB);
+                	UserAuthorityPO authority = new UserAuthorityPO();
+                	ResultPO addAuthorityResult = userAuthorityService.addAuthority(userDB, authority);
+                	if (IResultConstant.STATUS_OK.equals(addAuthorityResult.getStatus())) {
+                    	registerResult.setStatus(IResultConstant.STATUS_OK);
+                        registerResult.setResult(userDB);
+                	}
+                	else {
+                    	registerResult.setStatus(IResultConstant.STATUS_ERROR);
+                        registerResult.setResult(userDB);
+                        registerResult.setMessage("注册成功，但权限配置失败");
+                	}
                 }
                 else {
                     registerResult.setStatus(IResultConstant.STATUS_ERROR);
-                    registerResult.setMessage(status);
+                    registerResult.setMessage(status1);
                 }
             }
         }
@@ -115,7 +129,7 @@ public class UserService implements IUserService {
         ResultPO loginResult = new ResultPO();
         String userID = user.getUserID();
         String password = user.getPassword();
-        String userTablekey = RedisKeyUtil.getKey(IRedisTableKey.TBL_USER, IRedisTableKey.TBL_USER_USERID, userID);
+        String userTablekey = RedisKeyUtil.getKey(IRedisTableKey.TBL_USER, IRedisTableKey.TBL_USER_ID, userID);
         boolean hasKey = JedisUtils.exists(userTablekey);
         if (hasKey) {
             Map<String, String> userInfo = JedisUtils.hgetAll(userTablekey);
@@ -127,7 +141,7 @@ public class UserService implements IUserService {
                 e.printStackTrace();
             }
             if (password.equals(userResult.getPassword())) {
-                String authTableKey = RedisKeyUtil.getKey(IRedisTableKey.TBL_USERAUTH, IRedisTableKey.TBL_USER_USERID, userID);
+                String authTableKey = RedisKeyUtil.getKey(IRedisTableKey.TBL_USERAUTH, IRedisTableKey.TBL_USER_ID, userID);
                 Map<String, String> authInfo = JedisUtils.hgetAll(authTableKey);
                 UserAuthorityPO authority = null;
                 try {
@@ -139,7 +153,7 @@ public class UserService implements IUserService {
                 int loginLimitHours = Integer.valueOf(authority.getLoginLimitHours());
                 if (loginLimitHours <= 0) {
                     loginResult.setStatus(IResultConstant.STATUS_OK);
-                    loginResult.setResults(userResult);
+                    loginResult.setResult(userResult);
                 }
                 else {
                     loginResult.setStatus(IResultConstant.STATUS_LIMIT);
@@ -177,9 +191,4 @@ public class UserService implements IUserService {
         return null;
     }
 
-    @Override
-    public ResultPO userAuthorityModify(UserPO user) {
-        // TODO Auto-generated method stub
-        return null;
-    }
 }

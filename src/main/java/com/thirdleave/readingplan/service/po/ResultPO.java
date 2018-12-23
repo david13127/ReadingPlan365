@@ -6,7 +6,7 @@ public class ResultPO {
 
     private String message;
 
-    private Object results;
+    private Object result;
 
     public String getStatus() {
         return status;
@@ -24,12 +24,12 @@ public class ResultPO {
         this.message = message;
     }
 
-    public Object getResults() {
-        return results;
+    public Object getResult() {
+        return result;
     }
 
-    public void setResults(Object results) {
-        this.results = results;
+    public void setResult(Object result) {
+        this.result = result;
     }
 
 }

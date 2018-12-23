@@ -7,13 +7,19 @@ public class BookPO {
     private String bookName;
 
     private String kind;
-
+    
+    private String path;
+    
     private String author;
 
     private String price;
 
     private String publish;
 
+    private String description;
+    
+    private String remark;
+    
     public String getBookID() {
         return bookID;
     }
@@ -38,6 +44,14 @@ public class BookPO {
         this.kind = kind;
     }
 
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+    
     public String getAuthor() {
         return author;
     }
@@ -61,5 +75,21 @@ public class BookPO {
     public void setPublish(String publish) {
         this.publish = publish;
     }
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
 
 }
