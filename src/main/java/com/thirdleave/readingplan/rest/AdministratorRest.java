@@ -27,10 +27,19 @@ public class AdministratorRest {
 	public String login(HttpServletRequest request, HttpServletResponse response) {
 		return "login";
 	}
+
 	@ResponseBody
 	@RequestMapping(value = "/greeting")
 	public ModelAndView test(ModelAndView mv) {
 		mv.setViewName("/greeting");
+		mv.addObject("name", "欢迎使用Thymeleaf!");
+		return mv;
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/greeting2")
+	public ModelAndView test2(ModelAndView mv) {
+		mv.setViewName("greeting");
 		mv.addObject("name", "欢迎使用Thymeleaf!");
 		return mv;
 	}
