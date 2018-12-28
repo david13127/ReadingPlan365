@@ -62,6 +62,10 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 			<version>1.2.17</version>
@@ -100,6 +104,12 @@
 			<optional>true</optional>
 			<!-- optional=true,依赖不会传递， -->
 		</dependency>
+
+		<!-- jstl JSP标准标签库 -->
+		<!--dependency> <groupId>javax.servlet</groupId> <artifactId>jstl</artifactId> 
+			</dependency> <dependency> <groupId>org.apache.tomcat.embed</groupId> <artifactId>tomcat-embed-jasper</artifactId> 
+			<scope>provided</scope> </dependency> -->
+
 	</dependencies>
 
 	<dependencyManagement>
