@@ -2,79 +2,93 @@ package com.thirdleave.readingplan.service.po;
 
 public class BookPO {
 
-    private String bookID;
+	private String bookID;
 
-    private String bookName;
+	private String bookName;
 
-    private String kind;
-    
-    private String path;
-    
-    private String author;
+	private String kind;
 
-    private String price;
+	private String path;
 
-    private String publish;
+	private String author;
 
-    private String description;
-    
-    private String remark;
-    
-    public String getBookID() {
-        return bookID;
-    }
+	private String price;
 
-    public void setBookID(String bookID) {
-        this.bookID = bookID;
-    }
+	private String publish;
 
-    public String getBookName() {
-        return bookName;
-    }
+	private String description;
 
-    public void setBookName(String bookName) {
-        this.bookName = bookName;
-    }
+	private String remark;
 
-    public String getKind() {
-        return kind;
-    }
+	public BookPO() {
+	}
 
-    public void setKind(String kind) {
-        this.kind = kind;
-    }
+	public BookPO(String bookID, String bookName) {
+		this.bookID = bookID;
+		this.bookName = bookName;
+	}
 
-    public String getPath() {
-        return path;
-    }
+	public BookPO(String bookID, String bookName, String kind) {
+		this.bookID = bookID;
+		this.bookName = bookName;
+		this.kind = kind;
+	}
 
-    public void setPath(String path) {
-        this.path = path;
-    }
-    
-    public String getAuthor() {
-        return author;
-    }
+	public String getBookID() {
+		return bookID;
+	}
 
-    public void setAuthor(String author) {
-        this.author = author;
-    }
+	public void setBookID(String bookID) {
+		this.bookID = bookID;
+	}
 
-    public String getPrice() {
-        return price;
-    }
+	public String getBookName() {
+		return bookName;
+	}
 
-    public void setPrice(String price) {
-        this.price = price;
-    }
+	public void setBookName(String bookName) {
+		this.bookName = bookName;
+	}
 
-    public String getPublish() {
-        return publish;
-    }
+	public String getKind() {
+		return kind;
+	}
 
-    public void setPublish(String publish) {
-        this.publish = publish;
-    }
+	public void setKind(String kind) {
+		this.kind = kind;
+	}
+
+	public String getPath() {
+		return path;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
+	}
+
+	public String getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+
+	public String getPrice() {
+		return price;
+	}
+
+	public void setPrice(String price) {
+		this.price = price;
+	}
+
+	public String getPublish() {
+		return publish;
+	}
+
+	public void setPublish(String publish) {
+		this.publish = publish;
+	}
 
 	public String getDescription() {
 		return description;

@@ -1,0 +1,143 @@
+<meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<div class="login-page" ng-controller="mainController">
+    <div class="gtco-loader"></div>
+    <div id="webpage">
+        <div class="page-inner">
+            <nav class="gtco-nav" role="navigation">
+                <div class="gtco-container">
+
+                    <div class="row">
+                        <div class="col-sm-4 col-xs-12">
+                            <div id="gtco-logo"><a href="/html/index.html">Splash <em>.</em></a></div>
+                        </div>
+                        <div class="col-xs-8 text-right menu-1">
+                            <ul>
+                                <li><a href="features.html">Features</a></li>
+                                <li><a href="tour.html">Tour</a></li>
+                                <li class="has-dropdown">
+                                    <a href="#">Dropdown</a>
+                                    <ul class="dropdown">
+                                        <li><a href="#">Web Design</a></li>
+                                        <li><a href="#">eCommerce</a></li>
+                                        <li><a href="#">Branding</a></li>
+                                        <li><a href="#">API</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="pricing.html">Pricing</a></li>
+                                <li><a href="contact.html">Contact</a></li>
+                                <li class="btn-cta"><a href="#"><span>Get started</span></a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </nav>
+            <header id="gtco-header" class="gtco-cover" role="banner" style="background-image: url(/static/images/img_4.jpg)">
+                <div class="overlay"></div>
+                <div class="gtco-container">
+                    <div class="row">
+                        <div class="col-md-12 col-md-offset-0 text-left">
+
+                            <div class="row row-mt-15em">
+                                <div class="col-md-7 mt-text animate-box" data-animate-effect="fadeInUp">
+                                    <span class="intro-text-small">Welcome to 365读书计划</span>
+                                    <h1>管理员系统</h1>
+                                </div>
+                                <div class="col-md-4 col-md-push-1 animate-box" data-animate-effect="fadeInRight">
+                                    <div class="form-wrap">
+                                        <div class="tab">
+                                            <ul class="tab-menu">
+                                                <li class="gtco-first active"><a href="#" data-tab="login">Login</a>
+                                                </li>
+                                                <li class="gtco-second"><a href="#" data-tab="signup">Sign up</a></li>
+                                            </ul>
+                                            <div class="tab-content">
+                                                <div class="tab-content-inner active" data-content="login">
+                                                    <form action="#">
+                                                        <div class="row form-group">
+                                                            <div class="col-md-12">
+                                                                <label for="username_login">User ID</label>
+                                                                <input ng-model="person.userID" type="text" class="form-control"
+                                                                    id="username_login">
+                                                            </div>
+                                                        </div>
+                                                        <div class="row form-group">
+                                                            <div class="col-md-12">
+                                                                <label for="password_login">Password</label>
+                                                                <input ng-model="person.password" type="password" class="form-control"
+                                                                    id="password_login">
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row form-group">
+                                                            <div class="col-md-12">
+                                                                <input type="button" ng-click="userLogin()" class="btn btn-primary"
+                                                                    value="Login">
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+
+                                                <div class="tab-content-inner" data-content="signup">
+                                                    <form action="#">
+                                                        <div class="row form-group">
+                                                            <div class="col-md-12">
+                                                                <label for="userID_signup">User ID</label>
+                                                                <input ng-model="person.userID" type="text" class="form-control"
+                                                                    id="userID_signup">
+                                                            </div>
+                                                        </div>
+                                                        <div class="row form-group">
+                                                            <div class="col-md-12">
+                                                                <label for="username_signup">User Name</label>
+                                                                <input ng-model="person.name" type="text" class="form-control"
+                                                                    id="username_signup">
+                                                            </div>
+                                                        </div>
+                                                        <div class="row form-group">
+                                                            <div class="col-md-12">
+                                                                <label for="password1_signup">Password</label>
+                                                                <input ng-model="person.password" type="password" class="form-control"
+                                                                    id="password1_signup">
+                                                            </div>
+                                                        </div>
+                                                        <div class="row form-group">
+                                                            <div class="col-md-12">
+                                                                <label for="password2_signup">Repeat Password</label>
+                                                                <input ng-model="password_repeat" type="password" class="form-control"
+                                                                    id="password2_signup">
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row form-group">
+                                                            <div class="col-md-12">
+                                                                <input type="button" class="btn btn-primary" ng-click="userSignUp()"
+                                                                    value="Sign up">
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </header>
+        </div>
+    </div>
+</div>
+<style>
+    .login-page {
+        width: 100%;
+        height: 900px;
+        background-image: url("/static/images/img_bg_1.jpg");
+        background-size: 100% 100%;
+    }
+</style>

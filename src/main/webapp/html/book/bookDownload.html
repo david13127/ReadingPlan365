@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>管理员书籍浏览</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+	<table border="1">
+	    <tr>
+	        <th>书籍编号</th>
+	        <th>书籍名</th>
+	        <th>书籍类型</th>
+	        <th>作者</th>
+	        <th>出版时间</th>
+	        <th>描述</th>
+	    </tr>
+	    <tr th:each="book : ${bookList}" >
+	        <td th:text="${book.bookID}"></td>
+	        <td th:text="${book.bookName}"></td>
+	        <th th:text="${book.kind}"></th>
+	        <th th:text="${book.author}"></th>
+	        <th th:text="${book.publish}"></th>
+	        <th th:text="${book.description}"></th>
+	    </tr>
+	</table>
+</body>
+</html>
