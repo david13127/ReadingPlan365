@@ -184,6 +184,13 @@
 					<fork>true</fork><!-- 如果没有该项配置，可能devtools不会起作用 -->
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<skipTests>true</skipTests>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 	<repositories>

@@ -37,7 +37,7 @@ public class UserControl {
 		return JSONObject.fromObject(resp).toString();
 	}
 
-	public String userLogin(UserPO user) {
+	public ResultPO userLogin(UserPO user) {
 		ResultPO resp = new ResultPO();
 		ResultPO result = userService.userLogin(user);
 		if ("OK".equals(result.getStatus())) {
@@ -49,10 +49,10 @@ public class UserControl {
 			resp.setMessage(result.getMessage());
 		}
 		LOG.info(user.getUserID() + "登录成功");
-		return JSONObject.fromObject(resp).toString();
+		return resp;
 	}
 
-	public String userRegister(UserPO user) {
+	public ResultPO userRegister(UserPO user) {
 		ResultPO resp = new ResultPO();
 		ResultPO result = userService.userRegister(user);
 		if (IResultConstant.STATUS_OK.equals(result.getStatus())) {
@@ -63,6 +63,6 @@ public class UserControl {
 			resp.setStatus(result.getStatus());
 			resp.setMessage(result.getMessage());
 		}
-		return JSONObject.fromObject(resp).toString();
+		return resp;
 	}
 }
