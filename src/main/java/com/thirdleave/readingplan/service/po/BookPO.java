@@ -1,9 +1,17 @@
 package com.thirdleave.readingplan.service.po;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
+
+@Document(indexName = "book", type = "book", indexStoreType = "fs", shards = 5, replicas = 1, refreshInterval = "-1")
 public class BookPO {
 
+	@Id
 	private String bookID;
 
+	@Field(type = FieldType.Text, analyzer = "standard", searchAnalyzer = "standard")
 	private String bookName;
 
 	private String kind;
@@ -16,9 +24,11 @@ public class BookPO {
 
 	private String publish;
 
+	@Field(type = FieldType.Text, analyzer = "standard1", searchAnalyzer = "standard")
 	private String description;
 
-	private String remark;
+	@Field(type = FieldType.Text, analyzer = "standard2", searchAnalyzer = "standard")
+	private String content;
 
 	public BookPO() {
 	}
@@ -98,12 +108,12 @@ public class BookPO {
 		this.description = description;
 	}
 
-	public String getRemark() {
-		return remark;
+	public String getContent() {
+		return content;
 	}
 
-	public void setRemark(String remark) {
-		this.remark = remark;
+	public void setContent(String content) {
+		this.content = content;
 	}
 
 }

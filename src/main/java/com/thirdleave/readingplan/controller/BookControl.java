@@ -6,6 +6,8 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,34 +23,37 @@ import com.thirdleave.readingplan.utils.UuID;
 
 @Controller
 public class BookControl {
-
+	
+	private final static Logger LOG = LoggerFactory.getLogger(BookControl.class);
+	
 	@Autowired
 	private IBookService bookService;
 
 	@Autowired
 	private FileController fileControl;
 
-	
 	public ResultPO upLoadBook(HttpServletRequest request) throws IOException {
 		ResultPO result = new ResultPO();
-		MultipartFile file= ((MultipartHttpServletRequest) request).getFile(IJsonKey.PARA_FILENAME);
+		String user = request.getParameter(IJsonKey.PARA_USER);
+		MultipartFile file = ((MultipartHttpServletRequest) request).getFile(IJsonKey.PARA_FILENAME);
 		String kind = request.getParameter(IJsonKey.PARA_KIND);
 		String booksPath = PropertiesConfig.getProperties(IJsonKey.PROP_BOOKSPATH);
 		String targetPath = booksPath + File.separator + kind;
-		result =  fileControl.fileUpload(file, targetPath);
+		result = fileControl.fileUpload(file, targetPath);
 		if (IResultConstant.STATUS_OK.equals(result.getStatus())) {
 			BookPO newBook = new BookPO();
 			newBook.setKind(kind);
 			newBook.setBookName(file.getOriginalFilename());
 			ResultPO addBook = addBook(newBook);
 			result.setResult(addBook.getResult());
+			LOG.info(user + "上传了书籍:" + newBook.getBookName());
 		}
 		return result;
 	}
-	
-	
+
 	public ResultPO downLoadBook(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		ResultPO result = new ResultPO();
+		String user = request.getParameter(IJsonKey.PARA_USER);
 		String bookID = request.getParameter("bookID");
 		BookPO bookDB = bookService.queryBookByID(bookID);
 		if (bookDB == null) {
@@ -59,11 +64,12 @@ public class BookControl {
 		String bookNme = new String(request.getParameter("bookName").getBytes(), "UTF-8");
 		String bookPath = PropertiesConfig.getProperties("bookspath");
 		File file = new File(bookPath + File.separator + "novel" + File.separator + bookNme);
-		result =  fileControl.downLoad(request, response, file);
+		result = fileControl.downLoad(request, response, file);
 		result.setResult(bookDB);
+		LOG.info(user + "下载了书籍:" + bookDB.getBookName());
 		return result;
 	}
-	
+
 	public ResultPO addBook(BookPO book) {
 		ResultPO response = new ResultPO();
 		String bookID = UuID.generateShortUuid();

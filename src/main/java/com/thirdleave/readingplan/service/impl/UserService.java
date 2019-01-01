@@ -15,12 +15,15 @@ import com.thirdleave.readingplan.service.po.ResultPO;
 import com.thirdleave.readingplan.service.po.UserAuthorityPO;
 import com.thirdleave.readingplan.service.po.UserPO;
 import com.thirdleave.readingplan.utils.ReflectUtils;
-import com.thirdleave.readingplan.utils.redis.JedisUtils;
 import com.thirdleave.readingplan.utils.redis.RedisKeyUtil;
+import com.thirdleave.readingplan.utils.redis.RedisUtils;
 
 @Service
 @Transactional
 public class UserService implements IUserService {
+	
+	@Autowired
+	private RedisUtils redisUtils;
 	
 	@Autowired
 	private IUserAuthorityService userAuthorityService;
@@ -28,7 +31,7 @@ public class UserService implements IUserService {
     @Override
     public UserPO queryUserByID(String userID) {
         String key = RedisKeyUtil.getKey(IRedisTableKey.TBL_USER, IRedisTableKey.TBL_USER_ID, userID);
-        Map<String, String> userInfo = JedisUtils.hgetAll(key);
+        Map<Object, Object> userInfo = redisUtils.hmget(key);
         UserPO userDB = null;
         try {
             userDB = (UserPO)ReflectUtils.mapToObject(userInfo, UserPO.class);
@@ -86,21 +89,21 @@ public class UserService implements IUserService {
         ResultPO registerResult = new ResultPO();
         String userID = user.getUserID();
         String userTablekey = RedisKeyUtil.getKey(IRedisTableKey.TBL_USER, IRedisTableKey.TBL_USER_ID, userID);
-        boolean hasKey = JedisUtils.exists(userTablekey);
+        boolean hasKey = redisUtils.hasKey(userTablekey);
         if (hasKey) {
             registerResult.setStatus(IResultConstant.STATUS_ERROR);
             registerResult.setMessage("UserID/Name already exists");
         }
         else {
-            Map<String, String> userInfo = null;
+            Map<String, Object> userInfo = null;
             try {
                 userInfo = ReflectUtils.objectToMap(user);
             }
             catch (Exception e) {
                 e.printStackTrace();
             }
-            String status1 = JedisUtils.hmset(userTablekey, userInfo);
-            if (IResultConstant.STATUS_OK.equals(status1)) {
+            boolean status1 = redisUtils.hmset(userTablekey, userInfo);
+            if (status1) {
                 UserPO userDB = queryUserByID(user.getUserID());
                 if (userDB != null) {
                 	UserAuthorityPO authority = new UserAuthorityPO();
@@ -117,7 +120,7 @@ public class UserService implements IUserService {
                 }
                 else {
                     registerResult.setStatus(IResultConstant.STATUS_ERROR);
-                    registerResult.setMessage(status1);
+                    registerResult.setMessage("注册失败");
                 }
             }
         }
@@ -130,9 +133,9 @@ public class UserService implements IUserService {
         String userID = user.getUserID();
         String password = user.getPassword();
         String userTablekey = RedisKeyUtil.getKey(IRedisTableKey.TBL_USER, IRedisTableKey.TBL_USER_ID, userID);
-        boolean hasKey = JedisUtils.exists(userTablekey);
+        boolean hasKey = redisUtils.hasKey(userTablekey);
         if (hasKey) {
-            Map<String, String> userInfo = JedisUtils.hgetAll(userTablekey);
+            Map<Object, Object> userInfo = redisUtils.hmget(userTablekey);
             UserPO userResult = null;
             try {
                 userResult = (UserPO)ReflectUtils.mapToObject(userInfo, UserPO.class);
@@ -142,7 +145,7 @@ public class UserService implements IUserService {
             }
             if (password.equals(userResult.getPassword())) {
                 String authTableKey = RedisKeyUtil.getKey(IRedisTableKey.TBL_USERAUTH, IRedisTableKey.TBL_USER_ID, userID);
-                Map<String, String> authInfo = JedisUtils.hgetAll(authTableKey);
+                Map<Object, Object> authInfo = redisUtils.hmget(authTableKey);
                 UserAuthorityPO authority = null;
                 try {
                     authority = (UserAuthorityPO)ReflectUtils.mapToObject(authInfo, UserAuthorityPO.class);

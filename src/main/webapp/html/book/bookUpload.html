@@ -2,13 +2,47 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>管理员书籍上传</title>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>书籍上传</title>
+  <link rel="stylesheet" th:href="@{/static/css/easy-upload.css}">
 </head>
 <body>
-	<form action="./bookupload" method="post" enctype="multipart/form-data">
-		<input type="file" name="bookfile" value="请选择上传的文件" multiple /><input
-			type="submit" value="上传" />
-	</form>
+
+  <div id="easyContainer"></div>
+  
+  <script type="text/javascript" th:src="@{/static/js/jquery.min.js}"></script>
+  <!-- 视实际需要决定是否引入jquery.cookie-1.4.1.min.js-->
+  <script type="text/javascript" th:src="@{/static/js/jquery.cookie-1.4.1.min.js}"></script>
+  <script type="text/javascript" th:src="@{/static/scripts/book/easyUpload.js}"></script>
+  <script type="text/javascript">
+    $('#easyContainer').easyUpload({
+      allowFileTypes: '*.txt;*.epub;*.pdf;*.docx;*.doc',//允许上传文件类型
+      allowFileSize: 100000,//允许上传文件大小(KB)
+      selectType: '选择类型',//选择类型按钮文案
+      selectText: '选择文件',//选择文件按钮文案
+      multi: true,//是否允许多文件上传
+      multiNum: 20,//多文件上传时允许的文件数
+      showNote: true,//是否展示文件上传说明
+      note: '提示：最多上传20个文件，支持格式为txt、epub、pdf、docx、doc',//文件上传说明
+      showPreview: true,//是否显示文件预览
+      url: './bookupload',//上传文件地址
+      fileName: 'bookfile',//文件filename配置参数
+      formParam: {
+        token: $.cookie('token_cookie')//不需要验证token时可以去掉
+      },//文件filename以外的配置参数，格式：{key1:value1,key2:value2}
+      timeout: 30000,//请求超时时间
+      successFunc: function(res) {
+        console.log('成功回调', res);
+      },//上传成功回调函数
+      errorFunc: function(res) {
+        console.log('失败回调', res);
+      },//上传失败回调函数
+      deleteFunc: function(res) {
+        console.log('删除回调', res);
+      }//删除文件回调函数
+    });
+  </script>
+  
 </body>
 </html>

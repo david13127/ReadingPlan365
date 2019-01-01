@@ -11,6 +11,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -20,7 +22,9 @@ import com.thirdleave.readingplan.service.po.ResultPO;
 
 @Controller
 public class FileController {
-
+	
+	private final static Logger LOG = LoggerFactory.getLogger(FileController.class);
+	
 	/**
 	 * @param file
 	 * @return String
@@ -43,6 +47,7 @@ public class FileController {
 			file.transferTo(dest);
 			result.setStatus(IResultConstant.STATUS_OK);
 			result.setMessage("上传成功");
+			LOG.info("上传"+ fileName +"成功");
 		} catch (Exception e) {
 			result.setStatus(IResultConstant.STATUS_ERROR);
 			result.setMessage(e.getMessage());
@@ -76,6 +81,7 @@ public class FileController {
 				}
 				try {
 					file.transferTo(dest);
+					LOG.info("上传"+ fileName +"成功");
 				} catch (Exception e) {
 					result.setStatus(IResultConstant.STATUS_ERROR);
 					result.setMessage(e.getMessage());
@@ -110,12 +116,12 @@ public class FileController {
 					os.write(buffer);
 					i = bis.read(buffer);
 				}
-
 			} catch (Exception e) {
 				e.printStackTrace();
 			} finally {
 				result.setStatus(IResultConstant.STATUS_OK);
 				result.setMessage("下载成功");
+				LOG.info("上传"+ fileName +"成功");
 			}
 			try {
 				bis.close();

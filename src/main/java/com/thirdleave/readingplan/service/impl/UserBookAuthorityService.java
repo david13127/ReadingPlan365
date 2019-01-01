@@ -3,6 +3,7 @@ package com.thirdleave.readingplan.service.impl;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,13 +15,16 @@ import com.thirdleave.readingplan.service.po.ResultPO;
 import com.thirdleave.readingplan.service.po.UserBookAuthorityPO;
 import com.thirdleave.readingplan.service.po.UserPO;
 import com.thirdleave.readingplan.utils.ReflectUtils;
-import com.thirdleave.readingplan.utils.redis.JedisUtils;
 import com.thirdleave.readingplan.utils.redis.RedisKeyUtil;
+import com.thirdleave.readingplan.utils.redis.RedisUtils;
 
 @Service
 @Transactional
 public class UserBookAuthorityService implements IUserBookAuthorityService {
 
+	@Autowired
+	private RedisUtils redisUtils;
+	
 	@Override
 	public void initAuthority(UserBookAuthorityPO authority) {
 		authority.setReadLimit("true");
@@ -38,21 +42,21 @@ public class UserBookAuthorityService implements IUserBookAuthorityService {
 		String bookID = book.getBookID();
 		String authTableKey = RedisKeyUtil.getKey(IRedisTableKey.TBL_USER_BOOK_AUTH,
 				IRedisTableKey.TBL_USER_BOOK_AUTH_MAJOR_KEY, userID + "_&_" + bookID);
-		Map<String, String> authInfo = null;
+		Map<String, Object> authInfo = null;
 		try {
 			authInfo = ReflectUtils.objectToMap(authority);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		String status = JedisUtils.hmset(authTableKey, authInfo);
-		if (IResultConstant.STATUS_OK.equals(status)) {
+		boolean status = redisUtils.hmset(authTableKey, authInfo);
+		if (status) {
 			UserBookAuthorityPO authorityDB = queryAuthorityByUserAndBook(user, book);
 			if (authorityDB != null) {
-				result.setStatus(status);
+				result.setStatus(IResultConstant.STATUS_OK);
 				result.setResult(authorityDB);
 			} else {
 				result.setStatus(IResultConstant.STATUS_ERROR);
-				result.setMessage(status);
+				result.setMessage("添加权限失败");
 			}
 		}
 		return null;
@@ -82,7 +86,7 @@ public class UserBookAuthorityService implements IUserBookAuthorityService {
 		String bookID = book.getBookID();
 		String key = RedisKeyUtil.getKey(IRedisTableKey.TBL_USER_BOOK_AUTH, IRedisTableKey.TBL_USER_BOOK_AUTH_MAJOR_KEY,
 				userID + "_&_" + bookID);
-		Map<String, String> userBookAuthorityInfo = JedisUtils.hgetAll(key);
+		Map<Object, Object> userBookAuthorityInfo = redisUtils.hmget(key);
 		UserBookAuthorityPO userBookAuthorityDB = null;
 		try {
 			userBookAuthorityDB = (UserBookAuthorityPO) ReflectUtils.mapToObject(userBookAuthorityInfo,

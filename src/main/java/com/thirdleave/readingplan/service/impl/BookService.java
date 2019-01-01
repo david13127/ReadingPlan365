@@ -3,6 +3,7 @@ package com.thirdleave.readingplan.service.impl;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,13 +13,16 @@ import com.thirdleave.readingplan.service.IBookService;
 import com.thirdleave.readingplan.service.po.BookPO;
 import com.thirdleave.readingplan.service.po.ResultPO;
 import com.thirdleave.readingplan.utils.ReflectUtils;
-import com.thirdleave.readingplan.utils.redis.JedisUtils;
 import com.thirdleave.readingplan.utils.redis.RedisKeyUtil;
+import com.thirdleave.readingplan.utils.redis.RedisUtils;
 
 @Service
 @Transactional
 public class BookService implements IBookService {
 
+	@Autowired
+	private RedisUtils redisUtils;
+	
 	@Override
 	public ResultPO bookDelete(String bookID) {
 		// TODO Auto-generated method stub
@@ -36,26 +40,26 @@ public class BookService implements IBookService {
 		ResultPO registerResult = new ResultPO();
 		String bookID = book.getBookID();
 		String bookTablekey = RedisKeyUtil.getKey(IRedisTableKey.TBL_BOOK, IRedisTableKey.TBL_BOOK_ID, bookID);
-		boolean hasKey = JedisUtils.exists(bookTablekey);
+		boolean hasKey = redisUtils.hasKey(bookTablekey);
 		if (hasKey) {
 			registerResult.setStatus(IResultConstant.STATUS_ERROR);
 			registerResult.setMessage("BookID/Name already exists");
 		} else {
-			Map<String, String> bookInfo = null;
+			Map<String, Object> bookInfo = null;
 			try {
 				bookInfo = ReflectUtils.objectToMap(book);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			String status = JedisUtils.hmset(bookTablekey, bookInfo);
-			if (IResultConstant.STATUS_OK.equals(status)) {
+			boolean status = redisUtils.hmset(bookTablekey, bookInfo);
+			if (status) {
 				BookPO bookDB = queryBookByID(book.getBookID());
 				if (bookDB != null) {
-					registerResult.setStatus(status);
+					registerResult.setStatus(IResultConstant.STATUS_OK);
 					registerResult.setResult(bookDB);
 				} else {
 					registerResult.setStatus(IResultConstant.STATUS_ERROR);
-					registerResult.setMessage(status);
+					registerResult.setMessage("添加失败");
 				}
 			}
 		}
@@ -65,7 +69,7 @@ public class BookService implements IBookService {
 	@Override
 	public BookPO queryBookByID(String bookID) {
 		String key = RedisKeyUtil.getKey(IRedisTableKey.TBL_BOOK, IRedisTableKey.TBL_BOOK_ID, bookID);
-		Map<String, String> bookInfo = JedisUtils.hgetAll(key);
+		Map<Object, Object> bookInfo = redisUtils.hmget(key);
 		BookPO bookDB = null;
 		try {
 			bookDB = (BookPO) ReflectUtils.mapToObject(bookInfo, BookPO.class);

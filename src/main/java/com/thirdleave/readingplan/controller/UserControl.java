@@ -1,9 +1,7 @@
 package com.thirdleave.readingplan.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -11,31 +9,14 @@ import com.thirdleave.readingplan.constant.IResultConstant;
 import com.thirdleave.readingplan.service.IUserService;
 import com.thirdleave.readingplan.service.po.ResultPO;
 import com.thirdleave.readingplan.service.po.UserPO;
-import com.thirdleave.readingplan.utils.LogUtil;
-
-import net.sf.json.JSONObject;
 
 @Controller
 public class UserControl {
 
-	private final static Logger LOG = LogUtil.getLogger(UserControl.class);
+	private final static Logger LOG = LoggerFactory.getLogger(UserControl.class);
 
 	@Autowired
 	private IUserService userService;
-
-	public String getUserName(UserPO user) {
-		ResultPO resp = new ResultPO();
-		UserPO userDB = userService.queryUserByID(user.getUserID());
-		if (userDB != null) {
-			resp.setStatus(IResultConstant.STATUS_OK);
-			List<UserPO> users = new ArrayList<UserPO>();
-			users.add(userDB);
-			resp.setResult(users);
-		} else {
-			resp.setStatus(IResultConstant.STATUS_ERROR);
-		}
-		return JSONObject.fromObject(resp).toString();
-	}
 
 	public ResultPO userLogin(UserPO user) {
 		ResultPO resp = new ResultPO();
@@ -44,11 +25,11 @@ public class UserControl {
 			UserPO userFind = (UserPO) result.getResult();
 			resp.setStatus(result.getStatus());
 			resp.setResult(userFind);
+			LOG.info(user.getUserID() + "登录成功");
 		} else {
 			resp.setStatus(result.getStatus());
 			resp.setMessage(result.getMessage());
 		}
-		LOG.info(user.getUserID() + "登录成功");
 		return resp;
 	}
 
@@ -59,6 +40,7 @@ public class UserControl {
 			UserPO userFind = (UserPO) result.getResult();
 			resp.setStatus(result.getStatus());
 			resp.setResult(userFind);
+			LOG.info(user.getUserID() + "注册成功");
 		} else {
 			resp.setStatus(result.getStatus());
 			resp.setMessage(result.getMessage());

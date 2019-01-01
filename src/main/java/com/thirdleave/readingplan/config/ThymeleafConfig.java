@@ -14,7 +14,7 @@ public class ThymeleafConfig {
 		SpringResourceTemplateResolver resolver = new SpringResourceTemplateResolver();
 		resolver.setPrefix("/html/");
 		resolver.setSuffix(".html");
-		resolver.setTemplateMode("HTML5");
+		resolver.setTemplateMode("HTML");
 		resolver.setCacheable(false);
 		resolver.setCharacterEncoding("UTF-8");
 		return resolver;

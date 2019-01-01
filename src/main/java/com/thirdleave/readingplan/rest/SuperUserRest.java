@@ -6,21 +6,25 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.thirdleave.readingplan.controller.BookParseControl;
+import com.thirdleave.readingplan.service.IBookIndexService;
 import com.thirdleave.readingplan.service.IUserService;
 import com.thirdleave.readingplan.service.po.BookPO;
 import com.thirdleave.readingplan.service.po.ResultPO;
@@ -28,10 +32,19 @@ import com.thirdleave.readingplan.service.po.UserPO;
 
 @Controller
 @RequestMapping("/admin")
-public class AdministratorRest {
-	private final static Logger LOG = LoggerFactory.getLogger(AdministratorRest.class);
+public class SuperUserRest {
+	private final static Logger LOG = LoggerFactory.getLogger(SuperUserRest.class);
+
+	@Value("${bookspath}")
+	private String uploadPath;
 	@Autowired
 	private IUserService userService;
+
+	@Autowired
+	private IBookIndexService bookIndexService;
+
+	@Autowired
+	private BookParseControl bookParseControl;
 
 	@GetMapping(value = "/indexPage")
 	public String loginPage() {
@@ -58,15 +71,29 @@ public class AdministratorRest {
 
 	@RequestMapping(value = "/bookupload", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> bookupload(@RequestParam("bookfile") MultipartFile[] multiFiles) {
+	public Map<String, Object> bookupload(HttpServletRequest request) {
+		String kind = request.getParameter("kind");
+		System.out.println(kind);
+		MultipartHttpServletRequest mhsr = null;
+		if (request instanceof MultipartHttpServletRequest) {
+			mhsr = (MultipartHttpServletRequest) request;
+		}
+		List<MultipartFile> multiFiles = mhsr.getFiles("bookfile");
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		for (MultipartFile uploadFile : multiFiles) {
 			String fullFileName = uploadFile.getOriginalFilename();
 			int index1 = fullFileName.lastIndexOf(File.separator);
 			String fileName = fullFileName.substring(index1 + 1, fullFileName.length());
 			try {
-				File file = new File(fullFileName);
+				String targetPath = uploadPath + File.separator + kind;
+				File file = new File(targetPath + File.separator + fullFileName);
+				// 判断文件父目录是否存在
+				if (!file.getParentFile().exists()) {
+					file.getParentFile().mkdir();
+				}
 				uploadFile.transferTo(file);
+				BookPO book = bookParseControl.parseBook(file.getAbsolutePath());
+				bookIndexService.save(book);
 				resultMap.put(fileName, true);
 			} catch (Exception e) {
 				e.printStackTrace();
